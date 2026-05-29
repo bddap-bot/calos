@@ -6,7 +6,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject private var store: CalorieStore
 
-    private let deltas = [1, 10, 11]
+    private let deltas = [1, 10, 100]
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 5), count: 3)
 
     var body: some View {
