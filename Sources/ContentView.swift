@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Six quick-adjust buttons (+1/-1, +10/-10, +11/-11) over today's total.
 /// Tap to log instantly; long-press the total to undo the last tap.
+/// Wrapped in a ScrollView so the watch bezel/clock never permanently clips the total.
 struct ContentView: View {
     @EnvironmentObject private var store: CalorieStore
 
@@ -9,28 +10,31 @@ struct ContentView: View {
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 5), count: 3)
 
     var body: some View {
-        VStack(spacing: 6) {
-            VStack(spacing: 0) {
-                Text("\(store.todayTotal)")
-                    .font(.system(size: 34, weight: .bold, design: .rounded))
-                    .monospacedDigit()
-                    .minimumScaleFactor(0.5)
-                    .lineLimit(1)
-                    .contentTransition(.numericText())
-                    .animation(.snappy, value: store.todayTotal)
-                Text("kcal today")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-            }
-            .onLongPressGesture { store.undoLast() } // undo last tap
+        ScrollView {
+            VStack(spacing: 6) {
+                VStack(spacing: 0) {
+                    Text("\(store.todayTotal)")
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
+                        .contentTransition(.numericText())
+                        .animation(.snappy, value: store.todayTotal)
+                    Text("kcal today")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .onLongPressGesture { store.undoLast() } // undo last tap
 
-            // + row, then - row
-            LazyVGrid(columns: columns, spacing: 5) {
-                ForEach(deltas, id: \.self) { d in deltaButton(d) }
-                ForEach(deltas, id: \.self) { d in deltaButton(-d) }
+                LazyVGrid(columns: columns, spacing: 5) {
+                    ForEach(deltas, id: \.self) { d in deltaButton(d) }
+                    ForEach(deltas, id: \.self) { d in deltaButton(-d) }
+                }
             }
+            .padding(.horizontal, 3)
+            .padding(.top, 2)
         }
-        .padding(.horizontal, 3)
     }
 
     private func deltaButton(_ delta: Int) -> some View {
