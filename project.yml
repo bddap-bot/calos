@@ -22,3 +22,11 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: NO
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "4"  # Apple Watch
+        CODE_SIGNING_ALLOWED: NO     # CI compile-check only; no signing
+schemes:
+  Calos:
+    build:
+      targets:
+        Calos: all
+    run:
+      config: Debug
