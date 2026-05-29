@@ -29,14 +29,15 @@ final class CalorieStore: ObservableObject {
     }
 
     var todayTotal: Int {
-        max(0, entriesForToday.reduce(0) { $0 + $1.amount })
+        entriesForToday.reduce(0) { $0 + $1.amount }
     }
 
-    /// Adjust today's total by a (possibly negative) delta. Logged as an entry so
-    /// undo works; the displayed total is clamped at 0.
+    /// Adjust today's total by a (possibly negative) delta, clamped so the total
+    /// bottoms out at 0 (no hidden negative debt). Logged as an entry so undo works.
     func add(_ delta: Int) {
-        guard delta != 0 else { return }
-        entries.append(Entry(amount: delta))
+        let effective = max(0, todayTotal + delta) - todayTotal
+        guard effective != 0 else { return }
+        entries.append(Entry(amount: effective))
         save()
     }
 
