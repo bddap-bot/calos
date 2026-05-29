@@ -5,6 +5,9 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: macos-latest
@@ -30,3 +33,18 @@ jobs:
             -configuration Debug \
             CODE_SIGNING_ALLOWED=NO \
             build
+
+      # Keep the committed .xcodeproj in sync so the repo is clone-open-run
+      # (no local xcodegen step needed). Only on master; [skip ci] avoids a loop.
+      - name: Commit generated project
+        if: github.ref == 'refs/heads/master'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f Calos.xcodeproj
+          if git diff --cached --quiet; then
+            echo "no project changes"
+          else
+            git commit -m "CI: regenerate Calos.xcodeproj [skip ci]"
+            git push
+          fi

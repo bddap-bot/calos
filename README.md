@@ -7,24 +7,26 @@ Totals are stored on-device and roll over to 0 at midnight (history is kept).
 ## Build & run (needs a Mac)
 
 watchOS apps can only be built/signed on macOS with Xcode — that's an Apple
-constraint, not a choice. This repo ships an [XcodeGen](https://github.com/yonyz/XcodeGen)
-spec so the `.xcodeproj` is generated, not hand-maintained.
+constraint. The `.xcodeproj` is committed (CI regenerates it from `project.yml`),
+so it's clone → open → run:
 
 ```sh
-brew install xcodegen      # once
-xcodegen generate          # creates Calos.xcodeproj from project.yml
 open Calos.xcodeproj
 ```
 
 In Xcode:
 1. Select the **Calos** target → **Signing & Capabilities** → pick your Apple ID Team
-   (and change the bundle id from `com.bddap.calos` if needed).
-2. Choose a destination: an **Apple Watch Series … (watchOS) Simulator**, or your own
-   watch (paired via your iPhone, Developer Mode on).
+   (one-time; Apple requires it for install).
+2. Choose a destination: an **Apple Watch … Simulator**, or your own watch.
 3. **Run** (⌘R).
 
-No paid Apple Developer account is needed to run on the simulator or, for 7 days, on
-your own watch with a free personal team.
+No paid Apple Developer account is needed for the simulator, or for 7 days on your
+own watch with a free personal team. CI compiles every push on a macOS runner, so
+master is always in a building state.
+
+> Editing structure (adding files/targets)? Edit `project.yml`; CI regenerates and
+> re-commits `Calos.xcodeproj`. Or run `brew install xcodegen && xcodegen generate`
+> locally.
 
 ## Files
 - `Sources/CalosApp.swift` — app entry point.
