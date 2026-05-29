@@ -14,7 +14,6 @@
 
 /* Begin PBXFileReference section */
 		09EB07DA29792C909E83B88D /* CalorieStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalorieStore.swift; sourceTree = "<group>"; };
-		0A0AD1A18FD4AD4D5112E1D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		873E1DCA19AACE3B13C91AC7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		940B38E735BF2194D0A64F64 /* CalosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalosApp.swift; sourceTree = "<group>"; };
 		AF3E9553631BD9068DB9443D /* Calos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calos.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -35,7 +34,6 @@
 				09EB07DA29792C909E83B88D /* CalorieStore.swift */,
 				940B38E735BF2194D0A64F64 /* CalosApp.swift */,
 				873E1DCA19AACE3B13C91AC7 /* ContentView.swift */,
-				0A0AD1A18FD4AD4D5112E1D7 /* Info.plist */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -118,8 +116,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = Sources/Info.plist;
-				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Calos-Info.plist";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bddap.calos;
 				SDKROOT = watchos;
@@ -135,8 +133,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGNING_ALLOWED = NO;
 				CURRENT_PROJECT_VERSION = 1;
-				INFOPLIST_FILE = Sources/Info.plist;
-				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Calos-Info.plist";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bddap.calos;
 				SDKROOT = watchos;
