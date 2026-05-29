@@ -1,0 +1,8 @@
+# XcodeGen output
+Calos.xcodeproj/
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+.DS_Store
