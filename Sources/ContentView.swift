@@ -1,60 +1,71 @@
 import SwiftUI
 
-/// The whole app: today's total up top, a focused number field, Add + Undo.
-/// Primary story: open app → field is already focused → type a number → Add.
+/// The whole app: a numeric keypad so entry is numbers-only and fast.
+/// Tap digits → the big number; ✓ adds it to today's total. ⌫ deletes a digit.
+/// Long-press the total to undo the last entry.
 struct ContentView: View {
     @EnvironmentObject private var store: CalorieStore
-    @State private var input = ""
-    @FocusState private var focused: Bool
+    @State private var entry = ""
 
-    private var parsed: Int? {
-        let n = Int(input.trimmingCharacters(in: .whitespaces))
-        return (n ?? 0) > 0 ? n : nil
-    }
+    private let keys = ["1","2","3","4","5","6","7","8","9","⌫","0","✓"]
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 3)
 
     var body: some View {
-        VStack(spacing: 6) {
-            Text("\(store.todayTotal)")
-                .font(.system(size: 46, weight: .bold, design: .rounded))
-                .minimumScaleFactor(0.4)
-                .lineLimit(1)
-                .contentTransition(.numericText())
-                .animation(.snappy, value: store.todayTotal)
+        VStack(spacing: 4) {
+            // Header: today's total (long-press = undo) + what you're typing.
+            HStack(alignment: .firstTextBaseline) {
+                Text("\(store.todayTotal)")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .contentTransition(.numericText())
+                    .animation(.snappy, value: store.todayTotal)
+                Text("kcal")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                Spacer()
+                Text(entry.isEmpty ? "0" : entry)
+                    .font(.title2.weight(.bold))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+            }
+            .onLongPressGesture { store.undoLast() } // undo last entry
 
-            Text("kcal today")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-
-            TextField("add", text: $input)
-                .focused($focused)
-                .multilineTextAlignment(.center)
-                .font(.title3.weight(.semibold))
-                .onSubmit(add)
-
-            HStack(spacing: 6) {
-                Button(action: store.undoLast) {
-                    Image(systemName: "arrow.uturn.backward")
+            LazyVGrid(columns: columns, spacing: 4) {
+                ForEach(keys, id: \.self) { key in
+                    Button { tap(key) } label: {
+                        Text(key)
+                            .font(.title3)
+                            .frame(maxWidth: .infinity, minHeight: 34)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(tint(for: key))
+                    .disabled(key == "✓" && (Int(entry) ?? 0) <= 0)
                 }
-                .tint(.gray)
-                .disabled(store.entriesForToday.isEmpty)
-                .fixedSize()
-
-                Button(action: add) {
-                    Text("Add").frame(maxWidth: .infinity)
-                }
-                .tint(.green)
-                .disabled(parsed == nil)
             }
         }
         .padding(.horizontal, 2)
-        .onAppear { focused = true }
     }
 
-    private func add() {
-        guard let n = parsed else { return }
-        store.add(n)
-        input = ""
-        focused = true // stay ready for the next entry
+    private func tint(for key: String) -> Color {
+        switch key {
+        case "✓": return .green
+        case "⌫": return .orange
+        default: return .gray
+        }
+    }
+
+    private func tap(_ key: String) {
+        switch key {
+        case "⌫":
+            if !entry.isEmpty { entry.removeLast() }
+        case "✓":
+            if let n = Int(entry), n > 0 { store.add(n) }
+            entry = ""
+        default: // a digit
+            if entry.count < 5 { entry += key } // cap at 99999
+            if entry == "0" { entry = "" }       // no leading zero
+        }
     }
 }
 
