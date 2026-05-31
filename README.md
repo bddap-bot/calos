@@ -34,6 +34,27 @@ master is always in a building state.
 - `Sources/CalorieStore.swift` — persistence + daily rollover (UserDefaults, per-entry log).
 - `project.yml` — XcodeGen target spec (watchOS 10, single-target watch app).
 
+## App icon
+
+The icon lives at one file:
+
+```
+Assets.xcassets/AppIcon.appiconset/icon.png
+```
+
+To set it, **just replace that file** with your image and push. Easiest path:
+open the file on GitHub → **⋯ / Edit / replace** (or drag-drop in the web UI),
+commit. A placeholder is committed so the build is always green.
+
+You don't have to fuss over size or format — CI normalizes whatever you drop to a
+valid icon (exactly **1024×1024**, alpha channel stripped, since Apple rejects
+transparency on app icons). A roughly **square** image looks best (non-square gets
+squished to square). After you push, the `build` workflow regenerates the project
+and recompiles; the icon shows on next install/run.
+
+Want a local preview without CI? `node tools/make-placeholder-icon.js path/to/out.png`
+regenerates the placeholder; or just drop your own `icon.png` and open in Xcode.
+
 ## Notes / easy next steps
 - Entry uses the watch's text input; pick the number pad (or dictate "two hundred").
 - Want a complication / Smart Stack widget showing today's total? Add a WidgetKit

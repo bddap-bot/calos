@@ -20,6 +20,21 @@ jobs:
       - name: Install XcodeGen
         run: brew install xcodegen
 
+      # Whatever image a contributor drops as the app icon, make it valid:
+      # exactly 1024x1024 and with NO alpha channel (Apple rejects alpha on
+      # app icons). sips ships with macOS; bmp round-trip flattens alpha.
+      - name: Normalize app icon
+        run: |
+          ICON="Assets.xcassets/AppIcon.appiconset/icon.png"
+          if [ -f "$ICON" ]; then
+            sips -s format png -z 1024 1024 "$ICON" --out "$ICON"
+            sips -s format bmp "$ICON" --out /tmp/icon.bmp
+            sips -s format png /tmp/icon.bmp --out "$ICON"
+            echo "normalized $ICON:"; sips -g pixelWidth -g pixelHeight -g hasAlpha "$ICON"
+          else
+            echo "no icon.png present, skipping"
+          fi
+
       - name: Generate Xcode project
         run: xcodegen generate
 

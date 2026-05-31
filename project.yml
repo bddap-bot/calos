@@ -9,9 +9,11 @@ targets:
     platform: watchOS
     sources:
       - Sources
+      - Assets.xcassets
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.bddap.calos
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CURRENT_PROJECT_VERSION: 1
         MARKETING_VERSION: "1.0"
         # Use the committed Info.plist (don't auto-generate) so a fresh clone builds.
