@@ -57,7 +57,5 @@ regenerates the placeholder; or just drop your own `icon.png` and open in Xcode.
 
 ## Notes / easy next steps
 - Entry uses the watch's text input; pick the number pad (or dictate "two hundred").
-- Want a complication / Smart Stack widget showing today's total? Add a WidgetKit
-  extension — say the word.
-- Want it to sync to bothouse (so the bot can read your daily intake)? I can add a
-  tiny sync endpoint on the server side.
+- A complication / Smart Stack widget showing today's total would be a WidgetKit
+  extension.
